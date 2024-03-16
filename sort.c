@@ -10,7 +10,7 @@ void *Alloc(size_t sz)
 	extraMemoryAllocated += sz;
 	size_t* ret = malloc(sizeof(size_t) + sz);
 	*ret = sz;
-	printf("Extra memory allocated, size: %ld\n", sz);
+	printf("\nExtra memory allocated, size: %ld\n", sz);
 	return &ret[1];
 }
 
@@ -31,6 +31,77 @@ size_t Size(void* ptr)
 // extraMemoryAllocated counts bytes of extra memory allocated
 void mergeSort(int pData[], int l, int r)
 {
+
+		//create temporary arrays
+		int *arrLeft;
+		int *arrRight;
+	//array with one element is already sorted
+	if(l < r){
+	
+		//find the middle of the array and assign it to variable m
+		int m = l +(r-1)/2;
+		//recursive call to mergeSort
+		mergeSort(pData, l, m);
+		//mergeSort(pData, m + 1, r);
+
+		int i, j,k;
+		int sizeL = m -l + 1;
+		int sizeR = r - m;
+
+		//copy data to temp arrays arrLeft and arrRight
+		arrLeft = Alloc(sizeL);	
+		for( i = 0; i < sizeL; i++){
+			arrLeft[i] = pData[l + i];
+		}
+		//
+		for(int p = 0; p<sizeL; p++){
+			printf("%d ",arrLeft[p]);
+		}
+		//
+		arrRight = Alloc(sizeR);
+		for(j = 0; j < sizeR; j++){
+			arrRight[j] = pData[m+1+j];
+		}
+		
+		i = 0;
+		j = 0;
+		k = l;
+		//merge the arrays
+		while(i < sizeL && j < sizeR){
+			if(arrLeft[i] <= arrRight[j]){
+				pData[k] = arrLeft[i];
+				i++;
+				
+			}
+			else{
+				pData[k] = arrRight[j];
+				j++;
+			}
+				k++;
+		}
+		//check for remaining elements if the arrays were uneven
+		while( i < sizeL){
+			pData[k] = arrLeft[i];
+			i++;
+			k++;
+		}
+		//deallocate memory
+		DeAlloc(arrLeft);
+		while( j < sizeR){
+			pData[k] = arrRight[j];
+			j++;
+			k++;
+	
+		}
+		//deallocate memory
+		DeAlloc(arrRight);
+		
+	}
+
+	
+	
+	
+	
 }
 
 // parses input file to an integer array
